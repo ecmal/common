@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "file": "models.js",
+  "sourceRoot": "/Users/Sergey/Work/BB/wcb-project/common/src",
+  "sources": [
+    "models.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA;;GAEG",
+  "sourcesContent": [
+    "/**\n * Created by Sergey on 2/26/16.\n */\n"
+  ]
+}

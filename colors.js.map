@@ -1,0 +1,28 @@
+{
+  "version": 3,
+  "file": "colors.js",
+  "sourceRoot": "/Users/Sergey/Work/BB/wcb-project/common/src",
+  "sources": [
+    "colors.ts"
+  ],
+  "names": [
+    "Color",
+    "Paint",
+    "Paint.constructor",
+    "Paint.bold",
+    "Paint.dim",
+    "Paint.underline",
+    "Paint.color",
+    "Paint.red",
+    "Paint.green",
+    "Paint.yellow",
+    "Paint.blue",
+    "Paint.magenta",
+    "Paint.cyan",
+    "Paint.gray"
+  ],
+  "mappings": "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",
+  "sourcesContent": [
+    "export enum Color {\n    RED=31,      RED_FG=41,\n    GREEN=32,    GREEN_FG=42,\n    YELLOW=33,   YELLOW_FG=43,\n    BLUE=34,     BLUE_FG=44,\n    MAGENTA=35,  MAGENTA_FG=45,\n    CYAN=36,     CYAN_FG=46,\n    LGRAY=37,    LGRAY_FG=47,\n    GRAY=90,     GRAY_FG=100,\n\n}\nexport class Paint {\n    static bold(text){\n        return `\\033[1m${text}\\033[0m`\n    }\n    static dim(text){\n        return `\\033[2m${text}\\033[0m`\n    }\n    static underline(text){\n        return `\\033[4m${text}\\033[0m`\n    }\n    static color(text:string,color:Color){\n        return `\\033[${color}m${text}\\033[0m`\n    }\n    static red(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.RED:Color.RED_FG);\n    }\n    static green(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.GREEN:Color.GREEN_FG);\n    }\n    static yellow(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.YELLOW:Color.YELLOW_FG);\n    }\n    static blue(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.BLUE:Color.BLUE_FG);\n    }\n    static magenta(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.MAGENTA:Color.MAGENTA_FG);\n    }\n    static cyan(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.CYAN:Color.CYAN_FG);\n    }\n    static gray(text:string,bg?:boolean){\n        return this.color(text,!bg?Color.GRAY:Color.GRAY_FG);\n    }\n}"
+  ]
+}

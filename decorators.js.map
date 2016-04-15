@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "file": "decorators.js",
+  "sourceRoot": "/Users/Sergey/Work/BB/wcb-project/common/src",
+  "sources": [
+    "decorators.ts"
+  ],
+  "names": [
+    "decorate",
+    "Cached"
+  ],
+  "mappings": ";QAAO,UAAU,EACV,MAAM;IAEb,kBAAyB,IAAU,EAAE,EAAW;QAC5CA,IAAIA,GAAcA,CAACA;QACnBA,MAAMA,CAAAA,CAACA,OAAOA,IAAIA,CAACA,CAACA,CAACA,CAACA,CAAAA,CAACA;YACnBA,KAAKA,UAAUA,CAACA;YAChBA,KAAKA,QAAQA;gBACTA,GAAGA,GAAGA,UAAUA,CAACA,GAAGA,CAACA,IAAIA,CAACA,CAACA,CAACA,EAACA,IAAIA,CAACA,CAACA,CAACA,EAACA,IAAIA,CAACA,CAACA,CAACA,CAACA,CAACA;gBAC9CA,KAAKA,CAACA;QACdA,CAACA;QACDA,MAAMA,CAACA,GAAGA,GAAGA,EAAEA,CAACA,GAAGA,EAACA,IAAIA,CAACA,CAACA,CAACA,EAACA,IAAIA,CAACA,CAACA,CAACA,EAACA,IAAIA,CAACA,CAACA,CAACA,CAACA,GAAGA,UAACA,MAAMA,EAACA,GAAGA,EAACA,IAAIA;YAC3DA,EAAEA,gBAACA,GAAGA,GAAGA,UAAUA,CAACA,GAAGA,CAACA,MAAMA,EAACA,GAAGA,EAACA,IAAIA,CAACA,EAACA,MAAMA,EAACA,GAAGA,EAACA,IAAIA,SAAIA,IAAIA,EAACA,CAAAA;QACrEA,CAACA,CAACA;IACNA,CAACA;IAXD,+BAWC,CAAA;IAED;QAAuBC,cAAOA;aAAPA,WAAOA,CAAPA,sBAAOA,CAAPA,IAAOA;YAAPA,6BAAOA;;QAC1BA,MAAMA,CAACA,QAAQA,CAACA,IAAIA,EAACA,UAACA,GAAcA,EAACA,MAAMA,EAACA,GAAGA,EAACA,IAAIA,EAACA,UAAgBA,EAACA,QAAcA,EAACA,YAAiBA;YAAjDA,0BAAgBA,GAAhBA,kBAAgBA;YAACA,wBAAcA,GAAdA,gBAAcA;YAACA,4BAAiBA,GAAjBA,mBAAiBA;YAClGA,EAAEA,CAAAA,CAACA,GAAGA,YAAYA,MAAMA,CAACA,CAAAA,CAACA;gBACtBA,IAAIA,MAAMA,GAAGA,IAAIA,CAACA,GAAGA,CAACA;gBACtBA,IAAIA,CAACA,GAAGA,GAAGA;oBACP,IAAI,CAAC;wBACD,MAAM,CAAC,MAAM,CAAC,cAAc,CAAC,IAAI,EAAE,GAAG,EAAO;4BACzC,YAAA,UAAU,EAAC,UAAA,QAAQ,EAAC,cAAA,YAAY;4BAChC,KAAK,EAAE,MAAM,CAAC,IAAI,CAAC,IAAI,CAAC;yBAC3B,CAAC,CAAC,GAAG,CAAC,CAAC;oBACZ,CAAC;oBAAA,KAAK,CAAA,CAAC,EAAE,CAAC,CAAA,CAAC;wBACP,MAAM,CAAC,MAAM,CAAC,cAAc,CAAC,IAAI,EAAE,GAAG,EAAO;4BACzC,YAAY,EAAG,IAAI;4BACnB,QAAQ,EAAO,IAAI;4BACnB,KAAK,EAAU,SAAS;yBAC3B,CAAC,CAAC,GAAG,CAAC,CAAA;oBACX,CAAC;gBACL,CAAC,CAACA;gBACFA,MAAMA,CAACA,IAAIA,CAACA;YAChBA,CAACA;QACLA,CAACA,CAACA,CAACA;IACPA,CAACA;IArBD,2BAqBC,CAAA;;;;YArCM,UAAU,GAAG,OAAO,CAAC,UAAU,CAAC;YAChC,MAAM,GAAG,OAAO,CAAC,MAAM,CAAC",
+  "sourcesContent": [
+    "import Definition = Reflect.Definition;\nimport Member = Reflect.Member;\n\nexport function decorate(args:any[], fn:Function):any{\n    var def:Definition;\n    switch(typeof args[0]){\n        case 'function':\n        case 'object':\n            def = Definition.for(args[0],args[1],args[2]);\n            break;\n    }\n    return def ? fn(def,args[0],args[1],args[2]) : (target,key,desc)=>{\n        fn(def = Definition.for(target,key,desc),target,key,desc,...args)\n    };\n}\n\nexport function Cached(...args):any {\n    return decorate(args,(def:Definition,target,key,desc,enumerable=false,writable=false,configurable=true)=>{\n        if(def instanceof Member){\n            var getter = desc.get;\n            desc.get = function () {\n                try {\n                    return Object.defineProperty(this, key, <any>{\n                        enumerable,writable,configurable,\n                        value: getter.call(this)\n                    })[key];\n                }catch(ex){\n                    return Object.defineProperty(this, key, <any>{\n                        configurable : true,\n                        writable     : true,\n                        value        : undefined\n                    })[key]\n                }\n            };\n            return desc;\n        }\n    });\n}"
+  ]
+}
